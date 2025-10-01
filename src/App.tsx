@@ -24,9 +24,10 @@ export default function App() {
 
   // flashing + timer
   useEffect(() => {
+    if (!isFlashing) return;
+
     setSelected([]);
     setSubmitted(false);
-    setIsFlashing(true);
     setFlashOn(false);
     setProgress(0);
     startRef.current = null;
@@ -52,7 +53,7 @@ export default function App() {
       clearInterval(intId);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [level]);
+  }, [level,isFlashing]);
 
   const toggleCell = (id: number) => {
     if (isFlashing || submitted) return;
