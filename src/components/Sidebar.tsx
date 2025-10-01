@@ -1,12 +1,11 @@
-
 type SidebarProps = {
   isFlashing: boolean;
   submitted: boolean;
   selectedCount: number;
   hint: string;
   progress: number;
-  giveHint:boolean;
-  onGiveHint:()=>void;
+  giveHint: boolean;
+  onGiveHint: () => void;
   onSubmit: () => void;
   onRestart: () => void;
 };
@@ -21,15 +20,15 @@ export default function Sidebar({
   onSubmit,
   onRestart,
   onGiveHint,
-
 }: SidebarProps) {
-    
   return (
     <aside className="flex flex-col gap-4">
       <div className="rounded-2xl border border-zinc-200 p-4 dark:border-zinc-800">
         <h2 className="mb-2 text-lg font-semibold">Phase</h2>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {isFlashing ? "Watch the flashing pattern…" : "Select the squares you saw."}
+          {isFlashing
+            ? "Watch the flashing pattern…"
+            : "Select the squares you saw."}
         </p>
       </div>
 
@@ -54,7 +53,9 @@ export default function Sidebar({
       </button>
 
       {!isFlashing && !submitted && selectedCount === 0 && (
-        <p className="text-xs text-zinc-500">Tip: tap squares to select them.</p>
+        <p className="text-xs text-zinc-500">
+          Tip: tap squares to select them.
+        </p>
       )}
 
       {submitted && (
@@ -68,12 +69,14 @@ export default function Sidebar({
           <p className="mt-2 text-xs text-zinc-500">Advancing or retrying…</p>
         </div>
       )}
-{!isFlashing && <button
-        onClick={onGiveHint}
-        className="rounded-2xl border border-zinc-200 px-4 py-2 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
-      >
-        {!giveHint?"Show hint":"Hide"}
-      </button>}
+      {!isFlashing && (
+        <button
+          onClick={onGiveHint}
+          className="rounded-2xl border border-zinc-200 px-4 py-2 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+        >
+          {!giveHint ? "Show hint" : "Hide"}
+        </button>
+      )}
       {!isFlashing && !submitted && giveHint && (
         <div className="rounded-2xl border border-amber-300/40 bg-amber-50 p-4 text-amber-900 dark:border-amber-400/30 dark:bg-amber-950/20 dark:text-amber-200">
           <p className="text-sm">Need a nudge? {hint}</p>
@@ -86,6 +89,28 @@ export default function Sidebar({
       >
         Restart
       </button>
+      <div className="rounded-2xl border border-zinc-200 p-4 dark:border-zinc-800 shadow-md">
+  <h3 className="mb-3 text-lg font-semibold text-indigo-600 dark:text-indigo-400">
+    How to Play
+  </h3>
+  <ol className="list-decimal list-inside space-y-2 text-sm text-zinc-700 dark:text-zinc-300 ml-1">
+    <li>
+      <strong>Watch:</strong> Memorize the squares that flash during the **Watch Phase**.
+    </li>
+    <li>
+      <strong>Select:</strong> When the phase changes, tap the grid to select the squares you saw.
+    </li>
+    <li>
+      <strong>Submit:</strong> Click **Submit** to check your memory and score points.
+    </li>
+    <li>
+      <strong>Advance:</strong> Click **Restart** to move to the next level. (Clicking Restart before submitting resets your score.)
+    </li>
+    <li>
+      <strong>Tip:</strong> Use the **Show Hint** button if you need a clue during the selection phase.
+    </li>
+  </ol>
+</div>
     </aside>
   );
 }
