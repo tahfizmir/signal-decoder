@@ -13,6 +13,7 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [dark, setDark] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [giveHint,setGiveHint] = useState(false);
 
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -75,6 +76,9 @@ export default function App() {
     setScore((s) => s + (isPerfect ? 10 : partial));
     // Do not auto-reset or advance; keep feedback visible until Restart
   };
+  const onGiveHint=()=>{
+    setGiveHint((p)=>!p);
+  }
 
   return (
     <div className={dark ? "dark" : ""}>
@@ -106,6 +110,8 @@ export default function App() {
             selectedCount={selected.length}
             hint={hintForLevel(level)}
             progress={progress}
+            giveHint={giveHint}
+            onGiveHint={onGiveHint}
             onSubmit={onSubmit}
             onRestart={() => {
               setLevel(0);
@@ -115,6 +121,7 @@ export default function App() {
               setIsFlashing(true);
                setFlashOn(false);
                setProgress(0);
+               setGiveHint(false);
                startRef.current = null;
                if (rafRef.current) cancelAnimationFrame(rafRef.current);
             }}
