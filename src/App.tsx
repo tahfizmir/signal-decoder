@@ -14,6 +14,7 @@ export default function App() {
   const [dark, setDark] = useState(true);
   const [progress, setProgress] = useState(0);
   const [giveHint,setGiveHint] = useState(false);
+  const [lastPerfect, setLastPerfect] = useState(false);
 
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -74,7 +75,21 @@ export default function App() {
     const wrongPicks = selected.length - correctPicks;
     const partial = Math.max(0, correctPicks - wrongPicks);
     setScore((s) => s + (isPerfect ? 10 : partial));
+    setLastPerfect(isPerfect);
     // Do not auto-reset or advance; keep feedback visible until Restart
+  };
+
+  const onNextLevel = () => {
+    // advance level only when player had a perfect round
+    setLevel((l) => (l + 1) % levels.length);
+    setSubmitted(false);
+    setSelected([]);
+    setIsFlashing(true);
+    setFlashOn(false);
+    setProgress(0);
+    setLastPerfect(false);
+    startRef.current = null;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
   };
   const onGiveHint=()=>{
     setGiveHint((p)=>!p);
@@ -112,6 +127,8 @@ export default function App() {
             progress={progress}
             giveHint={giveHint}
             onGiveHint={onGiveHint}
+            lastPerfect={lastPerfect}
+            onNextLevel={onNextLevel}
             onSubmit={onSubmit}
             onRestart={() => {
               setLevel(0);
@@ -122,6 +139,7 @@ export default function App() {
                setFlashOn(false);
                setProgress(0);
                setGiveHint(false);
+              setLastPerfect(false);
                startRef.current = null;
                if (rafRef.current) cancelAnimationFrame(rafRef.current);
             }}

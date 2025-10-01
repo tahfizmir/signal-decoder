@@ -6,6 +6,8 @@ type SidebarProps = {
   progress: number;
   giveHint: boolean;
   onGiveHint: () => void;
+  lastPerfect?: boolean;
+  onNextLevel?: () => void;
   onSubmit: () => void;
   onRestart: () => void;
 };
@@ -17,6 +19,8 @@ export default function Sidebar({
   hint,
   progress,
   giveHint,
+  lastPerfect,
+  onNextLevel,
   onSubmit,
   onRestart,
   onGiveHint,
@@ -39,18 +43,29 @@ export default function Sidebar({
         />
       </div>
 
-      <button
-        onClick={onSubmit}
-        disabled={isFlashing || submitted}
-        className={[
-          "rounded-2xl px-4 py-3 text-center text-base font-semibold transition",
-          isFlashing || submitted
-            ? "cursor-not-allowed bg-zinc-300 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400"
-            : "bg-indigo-600 text-white hover:opacity-95 active:opacity-90 dark:bg-indigo-500",
-        ].join(" ")}
-      >
-        Submit
-      </button>
+      {!submitted && (
+        <button
+          onClick={onSubmit}
+          disabled={isFlashing}
+          className={[
+            "rounded-2xl px-4 py-3 text-center text-base font-semibold transition",
+            isFlashing
+              ? "cursor-not-allowed bg-zinc-300 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400"
+              : "bg-indigo-600 text-white hover:opacity-95 active:opacity-90 dark:bg-indigo-500",
+          ].join(" ")}
+        >
+          Submit
+        </button>
+      )}
+
+      {submitted && lastPerfect && (
+        <button
+          onClick={onNextLevel}
+          className="rounded-2xl bg-emerald-600 px-4 py-3 text-center text-base font-semibold text-white hover:opacity-95 active:opacity-90 dark:bg-emerald-500"
+        >
+          Next Level
+        </button>
+      )}
 
       {!isFlashing && !submitted && selectedCount === 0 && (
         <p className="text-xs text-zinc-500">
@@ -66,7 +81,11 @@ export default function Sidebar({
             <li>❌ Red: incorrect picks</li>
             <li>🟨 Yellow: missed squares</li>
           </ul>
-          <p className="mt-2 text-xs text-zinc-500">Advancing or retrying…</p>
+          {lastPerfect ? (
+            <p className="mt-2 text-xs text-emerald-600 dark:text-emerald-400">Perfect round! You can proceed.</p>
+          ) : (
+            <p className="mt-2 text-xs text-zinc-500">Review your result or restart.</p>
+          )}
         </div>
       )}
       {!isFlashing && (
