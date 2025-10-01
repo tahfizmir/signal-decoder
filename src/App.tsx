@@ -73,17 +73,7 @@ export default function App() {
     const wrongPicks = selected.length - correctPicks;
     const partial = Math.max(0, correctPicks - wrongPicks);
     setScore((s) => s + (isPerfect ? 10 : partial));
-
-    setTimeout(() => {
-      if (isPerfect) setLevel((l) => (l + 1) % levels.length);
-      setSubmitted(false);
-      // re-trigger flashing 
-      setIsFlashing(true);
-      setSelected([]);
-      setProgress(0);
-      startRef.current = null;
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    }, 1200);
+    // Do not auto-reset or advance; keep feedback visible until Restart
   };
 
   return (
@@ -123,7 +113,10 @@ export default function App() {
               setSelected([]);
               setSubmitted(false);
               setIsFlashing(true);
-              setProgress(0);
+               setFlashOn(false);
+               setProgress(0);
+               startRef.current = null;
+               if (rafRef.current) cancelAnimationFrame(rafRef.current);
             }}
           />
         </main>
